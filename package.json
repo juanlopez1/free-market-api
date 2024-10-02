@@ -6,7 +6,7 @@
         "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts",
         "build": "tsc",
         "start": "node -r module-alias/register dist/server.js",
-        "biome": "tsc --noEmit && biome format --write"
+        "lint": "tsc --noEmit && biome format --write"
     },
     "dependencies": {
         "axios": "^1.7.7",
