@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts",
         "build": "tsc",
-        "start": "node dist/app.js",
+        "start": "node -r module-alias/register dist/server.js",
         "biome": "tsc --noEmit && biome format --write"
     },
     "dependencies": {
@@ -13,6 +13,7 @@
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "express": "^4.21.0",
+        "module-alias": "^2.2.3",
         "morgan": "^1.10.0"
     },
     "devDependencies": {
@@ -24,5 +25,8 @@
         "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.6.2"
+    },
+    "_moduleAliases": {
+        "@free-market-api": "dist/"
     }
 }
