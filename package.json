@@ -1,7 +1,7 @@
 {
     "name": "free-market-api",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "./src/server.ts",
     "scripts": {
         "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts",
         "build": "tsc",
