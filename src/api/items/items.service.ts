@@ -34,7 +34,7 @@ class ItemsService {
                 price: {
                     amount,
                     currency: item.currency_id,
-                    decimals: item.price - amount,
+                    decimals: Math.floor((item.price - amount) * 100),
                 },
                 title: item.title,
                 seller_state: itemResponse.seller_address.state.name,

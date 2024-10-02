@@ -11,7 +11,7 @@ const formatProduct = (item: FetchItemByIdResponse, description: FetchItemDescri
         price: {
             currency: item.currency_id,
             amount,
-            decimals: (item.price - amount) * 100,
+            decimals: Math.floor((item.price - amount) * 100),
         },
         picture: item.pictures[0].url,
         condition: item.condition,
