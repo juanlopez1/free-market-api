@@ -1,3 +1,4 @@
+import logger from '@free-market-api/helpers/logger';
 import type { AuthorType } from '@free-market-api/types/author.types';
 import type { SearchItems } from '@free-market-api/services/mercadoLibre.types';
 import type { ItemType, SearchItemsType } from '@free-market-api/types/items.types';
@@ -17,7 +18,7 @@ class ItemsService {
             const response = await mercadoLibreApi.fetchCategoryById({ id: categoryId });
             return response.path_from_root.map((path) => path.name);
         } catch (error) {
-            console.error('Error getting category by id in ItemsService:', error);
+            logger.error('Error getting category by id in ItemsService:', error);
             throw new Error('Error getting category by id');
         }
     };
@@ -40,7 +41,7 @@ class ItemsService {
                 seller_state: itemResponse.seller_address.state.name,
             };
         } catch (error) {
-            console.error('Error converting search product in ItemsService:', error);
+            logger.error('Error converting search product in ItemsService:', error);
             throw new Error('Error searching items');
         }
     };
@@ -54,7 +55,7 @@ class ItemsService {
             const categories = await this.getCategoryById(categoryId);
             return { author: this.author, categories, items };
         } catch (error) {
-            console.error('Error searching items by query in ItemsService:', error);
+            logger.error('Error searching items by query in ItemsService:', error);
             throw new Error('Error searching items');
         }
     };
@@ -67,7 +68,7 @@ class ItemsService {
             const item = formatProduct(itemResponse, descriptionResponse);
             return { author: this.author, categories, item };
         } catch (error) {
-            console.error('Error getting item by id in ItemsService:', error);
+            logger.error('Error getting item by id in ItemsService:', error);
             throw new Error('Error getting item by id');
         }
     };

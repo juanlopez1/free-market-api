@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 
+import logger from '@free-market-api/helpers/logger';
 import itemsService from '@free-market-api/api/items/items.service';
 
 export const searchItems = async (req: Request, res: Response) => {
@@ -14,8 +15,8 @@ export const searchItems = async (req: Request, res: Response) => {
         const items = await itemsService.searchItems(req.query.q as string);
         res.json(items);
     } catch (error) {
-        console.error(`Error searching items by query in items's controller:`, error);
-        res.status(500).json({ error: 'search items controller', message: 'Error al obtener datos' });
+        logger.error(`Error searching items by query in items's controller:`, error);
+        res.status(500).json({ error: 'search items controller', message: 'Error realizar la búsqueda de items' });
     }
 };
 
@@ -31,7 +32,7 @@ export const getItemById = async (req: Request, res: Response) => {
         const item = await itemsService.getItemById(req.params.id);
         res.json(item);
     } catch (error) {
-        console.error(`Error getting item by id in items's controller:`, error);
-        res.status(500).json({ error: 'get item controller', message: 'Error al obtener datos' });
+        logger.error(`Error getting item by id in items's controller:`, error);
+        res.status(500).json({ error: 'get item controller', message: 'Error al obtener el item requerido' });
     }
 };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import logger from '@free-market-api/helpers/logger';
 import type {
     FetchCategoryByIdRequest,
     FetchCategoryByIdResponse,
@@ -24,7 +25,7 @@ class MercadoLibreApi {
             );
             return response.data;
         } catch (error) {
-            console.error('Error fetching a category by id from Mercado Libre API:', error);
+            logger.error('Error fetching a category by id from Mercado Libre API:', error);
             throw new Error('Error fetching a category by id');
         }
     };
@@ -38,7 +39,7 @@ class MercadoLibreApi {
             });
             return response.data;
         } catch (error) {
-            console.error('Error fetching an item by id from Mercado Libre API:', error);
+            logger.error('Error fetching an item by id from Mercado Libre API:', error);
             throw new Error('Error fetching an item by id');
         }
     };
@@ -57,7 +58,7 @@ class MercadoLibreApi {
             );
             return response.data;
         } catch (error) {
-            console.error(`Error fetching item's description by id from Mercado Libre API:`, error);
+            logger.error(`Error fetching item's description by id from Mercado Libre API:`, error);
             throw new Error(`Error fetching item's description`);
         }
     };
@@ -75,7 +76,7 @@ class MercadoLibreApi {
             );
             return response.data;
         } catch (error) {
-            console.error('Error searching items from Mercado Libre API:', error);
+            logger.error('Error searching items from Mercado Libre API:', error);
             throw new Error('Error searching items');
         }
     };
