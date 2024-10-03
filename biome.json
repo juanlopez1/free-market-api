@@ -28,9 +28,6 @@
                 "noUnusedFunctionParameters": "error",
                 "noUnusedVariables": "error",
                 "useExhaustiveDependencies": "warn"
-            },
-            "complexity": {
-                "useLiteralKeys": "off"
             }
         }
     },
