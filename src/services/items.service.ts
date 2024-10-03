@@ -13,13 +13,13 @@ class ItemsService {
         lastname: 'López',
     };
 
-    private getCategoryById = async (categoryId: string): Promise<string[]> => {
+    private getCategories = async (categoryId: string): Promise<string[]> => {
         try {
             const response = await mercadoLibreService.fetchCategoryById({ id: categoryId });
             return response.path_from_root.map((path) => path.name);
         } catch (error) {
-            logger.error('Error getting category by id in ItemsService:', error);
-            throw new Error('Error getting category by id');
+            logger.error('Error getting categories in ItemsService:', error);
+            throw new Error('Error getting categories');
         }
     };
 
@@ -52,7 +52,7 @@ class ItemsService {
             const results = response.results.slice(0, 4);
             const items = await Promise.all(results.map((item) => this.formatSearchProduct(item)));
             const categoryId = getMostFrequentCategoryId(results);
-            const categories = await this.getCategoryById(categoryId);
+            const categories = await this.getCategories(categoryId);
             return { author: this.author, categories, items };
         } catch (error) {
             logger.error('Error searching items by query in ItemsService:', error);
@@ -64,7 +64,7 @@ class ItemsService {
         try {
             const itemResponse = await mercadoLibreService.fetchItemById({ id });
             const descriptionResponse = await mercadoLibreService.fetchItemDescriptionById({ id });
-            const categories = await this.getCategoryById(itemResponse.category_id);
+            const categories = await this.getCategories(itemResponse.category_id);
             const item = formatProduct(itemResponse, descriptionResponse);
             return { author: this.author, categories, item };
         } catch (error) {
