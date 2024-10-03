@@ -5,10 +5,14 @@ import type {
     FetchItemByIdResponse,
     FetchItemDescriptionByIdResponse,
     SearchItemsResponse,
-} from '@free-market-api/services/mercadoLibre.types';
-import mercadoLibreApi from '@free-market-api/services/mercadoLibre.api';
+} from '@free-market-api/types/mercadoLibre.types';
+import mercadoLibreService from '@free-market-api/services/mercadoLibre.service';
 
-describe('MercadoLibreApi', () => {
+jest.mock('@free-market-api/helpers/logger', () => ({
+    error: jest.fn(),
+}));
+
+describe('Mercado Libre Service', () => {
     const baseURL = process.env.MERCADO_LIBRE_API_URL as string;
 
     afterEach(() => {
@@ -23,14 +27,14 @@ describe('MercadoLibreApi', () => {
         };
         nock(baseURL).get('/categories/MLA123').reply(200, mockResponse);
 
-        const data = await mercadoLibreApi.fetchCategoryById({ id: 'MLA123' });
+        const data = await mercadoLibreService.fetchCategoryById({ id: 'MLA123' });
         expect(data).toEqual(mockResponse);
     });
 
     it('fetchCategoryById should throw an error when API call fails', async () => {
         nock(baseURL).get('/categories/MLA123').reply(500);
 
-        await expect(mercadoLibreApi.fetchCategoryById({ id: 'MLA123' })).rejects.toThrow(
+        await expect(mercadoLibreService.fetchCategoryById({ id: 'MLA123' })).rejects.toThrow(
             'Error fetching a category by id',
         );
     });
@@ -49,16 +53,32 @@ describe('MercadoLibreApi', () => {
         };
         nock(baseURL).get('/items/MLA456').reply(200, mockResponse);
 
-        const data = await mercadoLibreApi.fetchItemById({ id: 'MLA456' });
+        const data = await mercadoLibreService.fetchItemById({ id: 'MLA456' });
         expect(data).toEqual(mockResponse);
+    });
+
+    it('fetchItemById should throw an error when API call fails', async () => {
+        nock(baseURL).get('/items/MLA456').reply(500);
+
+        await expect(mercadoLibreService.fetchItemById({ id: 'MLA456' })).rejects.toThrow(
+            'Error fetching an item by id',
+        );
     });
 
     it('fetchItemDescriptionById should return item description when API call is successful', async () => {
         const mockResponse: FetchItemDescriptionByIdResponse = { plain_text: 'Esto es un robot de juguete :D' };
         nock(baseURL).get('/items/MLA456/description').reply(200, mockResponse);
 
-        const data = await mercadoLibreApi.fetchItemDescriptionById({ id: 'MLA456' });
+        const data = await mercadoLibreService.fetchItemDescriptionById({ id: 'MLA456' });
         expect(data).toEqual(mockResponse);
+    });
+
+    it('fetchItemDescriptionById should throw an error when API call fails', async () => {
+        nock(baseURL).get('/items/MLA456/description').reply(500);
+
+        await expect(mercadoLibreService.fetchItemDescriptionById({ id: 'MLA456' })).rejects.toThrow(
+            `Error fetching item's description`,
+        );
     });
 
     it('searchItems should return search results when API call is successful', async () => {
@@ -78,7 +98,13 @@ describe('MercadoLibreApi', () => {
         };
         nock(baseURL).get('/sites/MLA/search').query({ q: 'laptop' }).reply(200, mockResponse);
 
-        const data = await mercadoLibreApi.searchItems({ query: 'laptop' });
+        const data = await mercadoLibreService.searchItems({ query: 'laptop' });
         expect(data).toEqual(mockResponse);
+    });
+
+    it('searchItems should throw an error when API call fails', async () => {
+        nock(baseURL).get('/sites/MLA/search').reply(500);
+
+        await expect(mercadoLibreService.searchItems({ query: 'laptop' })).rejects.toThrow('Error searching items');
     });
 });
