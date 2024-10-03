@@ -52,7 +52,7 @@ class ItemsService {
             const results = response.results.slice(0, 4);
             const items = await Promise.all(results.map((item) => this.formatSearchProduct(item)));
             const categoryId = getMostFrequentCategoryId(results);
-            const categories = await this.getCategories(categoryId);
+            const categories = categoryId ? await this.getCategories(categoryId) : [];
             return { author: this.author, categories, items };
         } catch (error) {
             logger.error('Error searching items by query in ItemsService:', error);

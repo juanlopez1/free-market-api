@@ -138,6 +138,19 @@ describe('ItemsService', () => {
             expect(result.categories).toEqual(['Computación']);
         });
 
+        it('should return empty items and empty categories when no results at search items', async () => {
+            (mercadoLibreService.searchItems as jest.Mock).mockResolvedValue({ results: [] });
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            jest.spyOn(itemsService as any, 'formatSearchProduct').mockResolvedValue({});
+            (getMostFrequentCategoryId as jest.Mock).mockReturnValue('');
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            jest.spyOn(itemsService as any, 'getCategories').mockResolvedValue([]);
+
+            const result = await itemsService.searchItems('laptop');
+            expect(result.items).toHaveLength(0);
+            expect(result.categories).toHaveLength(0);
+        });
+
         it('should log error and throw when search fails', async () => {
             const mockError = new Error('Search failed');
             (mercadoLibreService.searchItems as jest.Mock).mockRejectedValue(mockError);

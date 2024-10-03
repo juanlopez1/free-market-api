@@ -16,7 +16,7 @@ const formatProduct = (item: FetchItemByIdResponse, description: FetchItemDescri
         picture: item.pictures[0]?.url,
         condition: item.condition,
         free_shipping: item.shipping.free_shipping,
-        sold_quantity: 999, // This field is not returning by ML API
+        sold_quantity: 999, // NOTE: This field is not returning by ML API.
         description: description.plain_text,
     };
 };

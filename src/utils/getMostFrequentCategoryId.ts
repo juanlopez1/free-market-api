@@ -1,6 +1,9 @@
 import type { SearchItem } from '@free-market-api/types/mercadoLibre.types';
 
-const getMostFrequentCategoryId = (items: SearchItem[]): string => {
+const getMostFrequentCategoryId = (items: SearchItem[]): string | undefined => {
+    if (items.length === 0) {
+        return;
+    }
     const count = items.reduce(
         (acc, item) => {
             const key = item.category_id;
@@ -9,7 +12,7 @@ const getMostFrequentCategoryId = (items: SearchItem[]): string => {
         },
         {} as { [key: string]: number },
     );
-    return Object.keys(count).reduce((a, b) => (count[a] > count[b] ? a : b));
+    return Object.keys(count).reduce((a, b) => (count[a] >= count[b] ? a : b));
 };
 
 export default getMostFrequentCategoryId;
