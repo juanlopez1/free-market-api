@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 
 import logger from '@free-market-api/helpers/logger';
-import itemsService from '@free-market-api/api/items/items.service';
+import itemsService from '@free-market-api/services/items.service';
 
 export const searchItems = async (req: Request, res: Response) => {
     try {

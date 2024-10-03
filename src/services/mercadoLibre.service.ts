@@ -10,9 +10,9 @@ import type {
     FetchItemDescriptionByIdResponse,
     SearchItemsRequest,
     SearchItemsResponse,
-} from './mercadoLibre.types';
+} from '../types/mercadoLibre.types';
 
-class MercadoLibreApi {
+class MercadoLibreService {
     fetchCategoryById = async ({ id }: FetchCategoryByIdRequest): Promise<FetchCategoryByIdResponse> => {
         try {
             const response = await axios.get<FetchCategoryByIdResponse>(
@@ -82,5 +82,5 @@ class MercadoLibreApi {
     };
 }
 
-const mercadoLibreApi = new MercadoLibreApi();
-export default mercadoLibreApi;
+const mercadoLibreService = new MercadoLibreService();
+export default mercadoLibreService;

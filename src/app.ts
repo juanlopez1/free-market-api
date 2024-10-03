@@ -1,16 +1,12 @@
 import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
 
-import apiRoutes from '@free-market-api/api';
+import applyMiddlewares from '@free-market-api/middlewares';
+import routes from '@free-market-api/routes';
 
 const app = express();
 
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+applyMiddlewares(app);
 
-app.use('/api', apiRoutes);
+app.use('/', routes);
 
 export default app;

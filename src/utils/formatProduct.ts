@@ -1,7 +1,7 @@
 import type {
     FetchItemByIdResponse,
     FetchItemDescriptionByIdResponse,
-} from '@free-market-api/services/mercadoLibre.types';
+} from '@free-market-api/types/mercadoLibre.types';
 
 const formatProduct = (item: FetchItemByIdResponse, description: FetchItemDescriptionByIdResponse) => {
     const amount = Math.floor(item.price);

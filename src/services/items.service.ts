@@ -1,9 +1,9 @@
 import logger from '@free-market-api/helpers/logger';
 import type { AuthorType } from '@free-market-api/types/author.types';
-import type { SearchItems } from '@free-market-api/services/mercadoLibre.types';
+import type { SearchItems } from '@free-market-api/types/mercadoLibre.types';
 import type { ItemType, SearchItemsType } from '@free-market-api/types/items.types';
 import type { SearchProductType } from '@free-market-api/types/product.types';
-import mercadoLibreApi from '@free-market-api/services/mercadoLibre.api';
+import mercadoLibreService from '@free-market-api/services/mercadoLibre.service';
 import formatProduct from '@free-market-api/utils/formatProduct';
 import getMostFrequentCategoryId from '@free-market-api/utils/getMostFrequentCategoryId';
 
@@ -15,7 +15,7 @@ class ItemsService {
 
     private getCategoryById = async (categoryId: string): Promise<string[]> => {
         try {
-            const response = await mercadoLibreApi.fetchCategoryById({ id: categoryId });
+            const response = await mercadoLibreService.fetchCategoryById({ id: categoryId });
             return response.path_from_root.map((path) => path.name);
         } catch (error) {
             logger.error('Error getting category by id in ItemsService:', error);
@@ -25,7 +25,7 @@ class ItemsService {
 
     private formatSearchProduct = async (item: SearchItems): Promise<SearchProductType> => {
         try {
-            const itemResponse = await mercadoLibreApi.fetchItemById({ id: item.id });
+            const itemResponse = await mercadoLibreService.fetchItemById({ id: item.id });
             const amount = Math.floor(item.price);
             return {
                 condition: item.condition,
@@ -48,7 +48,7 @@ class ItemsService {
 
     searchItems = async (query: string): Promise<SearchItemsType> => {
         try {
-            const response = await mercadoLibreApi.searchItems({ query });
+            const response = await mercadoLibreService.searchItems({ query });
             const results = response.results.slice(0, 4);
             const items = await Promise.all(results.map((item) => this.formatSearchProduct(item)));
             const categoryId = getMostFrequentCategoryId(results);
@@ -62,8 +62,8 @@ class ItemsService {
 
     getItemById = async (id: string): Promise<ItemType> => {
         try {
-            const itemResponse = await mercadoLibreApi.fetchItemById({ id });
-            const descriptionResponse = await mercadoLibreApi.fetchItemDescriptionById({ id });
+            const itemResponse = await mercadoLibreService.fetchItemById({ id });
+            const descriptionResponse = await mercadoLibreService.fetchItemDescriptionById({ id });
             const categories = await this.getCategoryById(itemResponse.category_id);
             const item = formatProduct(itemResponse, descriptionResponse);
             return { author: this.author, categories, item };

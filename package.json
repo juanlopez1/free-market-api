@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts",
         "build": "tsc",
-        "start": "node -r module-alias/register dist/server.js",
+        "start": "node -r module-alias/register dist/src/server.js",
         "lint": "tsc --noEmit && biome format --write",
         "test": "npx jest --collect-coverage",
         "test:watch": "npx jest --watch"
@@ -26,14 +26,20 @@
         "@types/jest": "^29.5.13",
         "@types/morgan": "^1.9.9",
         "@types/node": "^22.7.4",
+        "@types/supertest": "^6.0.2",
         "jest": "^29.7.0",
         "nock": "^13.5.5",
+        "supertest": "^7.0.0",
         "ts-jest": "^29.2.5",
         "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.6.2"
     },
     "_moduleAliases": {
-        "@free-market-api": "dist/"
+        "@free-market-api": "dist/src/"
+    },
+    "author": { "name": "Juan Manuel López" },
+    "repository": {
+        "url": "https://github.com/juanlopez1/free-market-api"
     }
 }
