@@ -1,6 +1,6 @@
 import logger from '@free-market-api/helpers/logger';
 import type { AuthorType } from '@free-market-api/types/author.types';
-import type { SearchItems } from '@free-market-api/types/mercadoLibre.types';
+import type { SearchItem } from '@free-market-api/types/mercadoLibre.types';
 import type { ItemType, SearchItemsType } from '@free-market-api/types/items.types';
 import type { SearchProductType } from '@free-market-api/types/product.types';
 import mercadoLibreService from '@free-market-api/services/mercadoLibre.service';
@@ -23,7 +23,7 @@ class ItemsService {
         }
     };
 
-    private formatSearchProduct = async (item: SearchItems): Promise<SearchProductType> => {
+    private formatSearchProduct = async (item: SearchItem): Promise<SearchProductType> => {
         try {
             const itemResponse = await mercadoLibreService.fetchItemById({ id: item.id });
             const amount = Math.floor(item.price);
@@ -41,8 +41,8 @@ class ItemsService {
                 seller_state: itemResponse.seller_address.state.name,
             };
         } catch (error) {
-            logger.error('Error converting search product in ItemsService:', error);
-            throw new Error('Error searching items');
+            logger.error('Error formatting search product in ItemsService:', error);
+            throw new Error('Error formatting items');
         }
     };
 

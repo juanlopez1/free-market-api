@@ -39,7 +39,7 @@ export type SearchItemsRequest = {
     query: string;
 };
 
-export type SearchItems = {
+export type SearchItem = {
     id: string;
     title: string;
     condition: 'new' | 'used';
@@ -51,5 +51,5 @@ export type SearchItems = {
 };
 
 export type SearchItemsResponse = {
-    results: SearchItems[];
+    results: SearchItem[];
 };

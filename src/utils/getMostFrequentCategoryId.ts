@@ -1,6 +1,6 @@
-import type { SearchItems } from '@free-market-api/types/mercadoLibre.types';
+import type { SearchItem } from '@free-market-api/types/mercadoLibre.types';
 
-const getMostFrequentCategoryId = (items: SearchItems[]): string => {
+const getMostFrequentCategoryId = (items: SearchItem[]): string => {
     const count = items.reduce(
         (acc, item) => {
             const key = item.category_id;
