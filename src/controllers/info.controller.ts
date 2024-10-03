@@ -5,7 +5,7 @@ import pkg from '@free-market-api/../package.json';
 
 export const getInfo = async (_: Request, res: Response) => {
     try {
-        res.send({
+        res.status(200).json({
             title: pkg.name,
             version: pkg.version,
             github: pkg.repository.url,
