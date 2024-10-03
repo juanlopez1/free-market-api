@@ -13,7 +13,7 @@ const formatProduct = (item: FetchItemByIdResponse, description: FetchItemDescri
             amount,
             decimals: Math.floor((item.price - amount) * 100),
         },
-        picture: item.pictures[0].url,
+        picture: item.pictures[0]?.url,
         condition: item.condition,
         free_shipping: item.shipping.free_shipping,
         sold_quantity: 999, // This field is not returning by ML API
