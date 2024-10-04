@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-import logger from '@free-market-api/helpers/logger';
+import axios, { type AxiosResponse } from 'axios';
 import type {
     FetchCategoryByIdRequest,
     FetchCategoryByIdResponse,
@@ -10,75 +8,72 @@ import type {
     FetchItemDescriptionByIdResponse,
     SearchItemsRequest,
     SearchItemsResponse,
-} from '../types/mercadoLibre.types';
+} from '@free-market-api/types/mercadoLibre.types';
 
 class MercadoLibreService {
-    fetchCategoryById = async ({ id }: FetchCategoryByIdRequest): Promise<FetchCategoryByIdResponse> => {
-        try {
-            const response = await axios.get<FetchCategoryByIdResponse>(
-                `${process.env.MERCADO_LIBRE_API_URL}categories/${id}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-            return response.data;
-        } catch (error) {
-            logger.error('Error fetching a category by id from Mercado Libre API:', error);
-            throw new Error('Error fetching a category by id');
+    processDefaultErrors = <T>(response: AxiosResponse<T>) => {
+        if (response.status >= 200 && response.status < 300) {
+            return;
         }
+        if (response.status === 400) {
+            throw new Error(`Bad request: ${response.status} `);
+        }
+        if (response.status === 404) {
+            throw new Error(`Not found: ${response.status} `);
+        }
+        if (response.status >= 500) {
+            throw new Error(`Server error: ${response.status} `);
+        }
+        throw new Error(`Failed to proceed: ${response.status}`);
     };
 
-    fetchItemById = async ({ id }: FetchItemByIdRequest): Promise<FetchItemByIdResponse> => {
-        try {
-            const response = await axios.get<FetchItemByIdResponse>(`${process.env.MERCADO_LIBRE_API_URL}items/${id}`, {
+    fetchCategoryById = async ({ id }: FetchCategoryByIdRequest): Promise<FetchCategoryByIdResponse> => {
+        const response = await axios.get<FetchCategoryByIdResponse>(
+            `${process.env.MERCADO_LIBRE_API_URL}categories/${id}`,
+            {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
-            return response.data;
-        } catch (error) {
-            logger.error('Error fetching an item by id from Mercado Libre API:', error);
-            throw new Error('Error fetching an item by id');
-        }
+            },
+        );
+        this.processDefaultErrors(response);
+        return response.data;
+    };
+
+    fetchItemById = async ({ id }: FetchItemByIdRequest): Promise<FetchItemByIdResponse> => {
+        const response = await axios.get<FetchItemByIdResponse>(`${process.env.MERCADO_LIBRE_API_URL}items/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        this.processDefaultErrors(response);
+        return response.data;
     };
 
     fetchItemDescriptionById = async ({
         id,
     }: FetchItemDescriptionByIdRequest): Promise<FetchItemDescriptionByIdResponse> => {
-        try {
-            const response = await axios.get<FetchItemDescriptionByIdResponse>(
-                `${process.env.MERCADO_LIBRE_API_URL}items/${id}/description`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+        const response = await axios.get<FetchItemDescriptionByIdResponse>(
+            `${process.env.MERCADO_LIBRE_API_URL}items/${id}/description`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-            );
-            return response.data;
-        } catch (error) {
-            logger.error(`Error fetching item's description by id from Mercado Libre API:`, error);
-            throw new Error(`Error fetching item's description`);
-        }
+            },
+        );
+        this.processDefaultErrors(response);
+        return response.data;
     };
 
     searchItems = async ({ query }: SearchItemsRequest): Promise<SearchItemsResponse> => {
-        try {
-            const response = await axios.get<SearchItemsResponse>(
-                `${process.env.MERCADO_LIBRE_API_URL}sites/MLA/search`,
-                {
-                    params: { q: query },
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-            return response.data;
-        } catch (error) {
-            logger.error('Error searching items from Mercado Libre API:', error);
-            throw new Error('Error searching items');
-        }
+        const response = await axios.get<SearchItemsResponse>(`${process.env.MERCADO_LIBRE_API_URL}sites/MLA/search`, {
+            params: { q: query },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        this.processDefaultErrors(response);
+        return response.data;
     };
 }
 

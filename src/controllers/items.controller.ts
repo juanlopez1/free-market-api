@@ -1,6 +1,6 @@
+import { AxiosError } from 'axios';
 import type { Request, Response } from 'express';
 
-import logger from '@free-market-api/helpers/logger';
 import itemsService from '@free-market-api/services/items.service';
 
 export const searchItems = async (req: Request, res: Response) => {
@@ -17,8 +17,11 @@ export const searchItems = async (req: Request, res: Response) => {
         const items = await itemsService.searchItems(query as string);
         res.status(200).json(items);
     } catch (error) {
-        logger.error(`Error searching items by query in items's controller:`, error);
-        res.status(500).json({ error: 'search items controller', message: 'Error realizar la búsqueda de items' });
+        if (error instanceof AxiosError) {
+            res.status(error.status ?? 500).json({ type: 'x-server-error', message: error.message });
+            return;
+        }
+        res.status(500).json({ type: 'server-error', message: 'Internal server error' });
     }
 };
 
@@ -36,7 +39,10 @@ export const getItemById = async (req: Request, res: Response) => {
         const item = await itemsService.getItemById(id);
         res.status(200).json(item);
     } catch (error) {
-        logger.error(`Error getting item by id in items's controller:`, error);
-        res.status(500).json({ error: 'get item controller', message: 'Error al obtener el item requerido' });
+        if (error instanceof AxiosError) {
+            res.status(error.status ?? 500).json({ type: 'x-server-error', message: error.message });
+            return;
+        }
+        res.status(500).json({ type: 'server-error', message: 'Internal server error' });
     }
 };
